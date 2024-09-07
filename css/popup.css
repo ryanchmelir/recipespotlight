@@ -1,0 +1,174 @@
+:root {
+    --primary-color: #2c3e50;
+    --secondary-color: #34495e;
+    --accent-color: #3498db;
+    --text-color: #333;
+    --background-color: #ecf0f1;
+}
+
+#_recipe_spotlight_highlight {
+	position: absolute !important;
+	top: 0 !important;
+	left: 50% !important;
+	transform: translate(-50%, 0) !important;
+	margin: 20px !important;
+	padding: 0 !important;
+	background: white !important;
+	z-index: 999999999 !important;
+	box-shadow: rgba(0, 0, 0, 0.5) 0px 0px 0px 9999999px !important;
+	max-width: 700px !important;
+	min-width: 340px !important;
+	display: none;
+	border-radius: 12px !important;
+	overflow: hidden !important;
+}
+
+#_recipe_spotlight_header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 15px 20px;
+	background-color: var(--primary-color);
+	color: white;
+	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+	border-top-left-radius: 12px;
+	border-top-right-radius: 12px;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#_recipe_spotlight_logo_title_container {
+	display: flex;
+	align-items: center;
+}
+
+#_recipe_spotlight_logo {
+	width: 32px;
+	height: 32px;
+	margin-right: 12px;
+	filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.2));
+}
+
+#_recipe_spotlight_title {
+	font-size: 20px;
+	font-weight: 600;
+	letter-spacing: 0.5px;
+	text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+#_recipe_spotlight_button_container {
+	display: flex;
+	gap: 10px;
+}
+
+._rsbtn {
+	color: white;
+	font-size: 14px;
+	font-weight: normal;
+	background-color: #3498db;
+	border: none;
+	border-radius: 4px;
+	padding: 8px 12px;
+	margin-left: 10px;
+	cursor: pointer;
+	transition: background-color 0.3s ease, transform 0.1s ease;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+._rsbtn:hover {
+	background-color: #2980b9;
+	transform: translateY(-1px);
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+}
+
+._rsbtn:active {
+	transform: translateY(1px);
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+._recipe_spotlight_iconbtn {
+	font-size: 18px;
+	padding: 6px 10px;
+	line-height: 1;
+	background-color: transparent;
+	color: #ecf0f1;
+	box-shadow: none;
+}
+
+._recipe_spotlight_iconbtn:hover {
+	background-color: rgba(255, 255, 255, 0.1);
+	box-shadow: none;
+}
+
+#_recipe_spotlight_footer {
+	font-size: 12px;
+	color: #555;
+	text-align: center;
+	padding: 10px;
+	border-top: 1px solid #eee;
+	background: white;
+	box-sizing: border-box;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+#_recipe_spotlight_footer p {
+	margin: 0 0 8px 0;
+}
+
+._recipe_spotlight_footer-links {
+	display: flex;
+	justify-content: center;
+	margin-bottom: 10px;
+}
+
+._recipe_spotlight_footer-link {
+	color: var(--accent-color);
+	text-decoration: none;
+	transition: color 0.3s ease, transform 0.3s ease;
+	display: inline-block;
+}
+
+._recipe_spotlight_footer-link:hover {
+	color: #2980b9;
+	text-decoration: underline;
+	transform: translateY(-2px);
+}
+
+._recipe_spotlight_footer-social {
+	display: flex;
+	justify-content: center;
+	gap: 10px;
+	margin-top: 8px;
+}
+
+._recipe_spotlight_social-icon {
+	display: inline-block;
+	transition: transform 0.3s ease;
+}
+
+._recipe_spotlight_social-icon:hover {
+	transform: translateY(-2px);
+}
+
+._recipe_spotlight_social-icon img {
+	width: 20px;
+	height: 20px;
+}
+
+#_recipe_spotlight_content {
+	padding: 20px;
+	overflow-y: auto;
+	max-height: calc(100vh - 150px); /* Adjust based on your header and footer height */
+	padding-bottom: 60px; /* Add padding to avoid content being hidden behind the footer */
+}
+
+._recipe_spotlight_section_header {
+	font-size: 20px;
+	font-weight: bold;
+	margin-top: 20px;
+	margin-bottom: 10px;
+	color: #2c3e50;
+	border-bottom: 2px solid #3498db;
+	padding-bottom: 5px;
+}

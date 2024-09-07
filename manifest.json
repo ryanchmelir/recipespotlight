@@ -1,0 +1,39 @@
+{
+  "update_url": "https://clients2.google.com/service/update2/crx",
+  "manifest_version": 3,
+  "name": "Recipe Spotlight",
+  "short_name": "Recipe Spotlight",
+  "version": "0.1",
+  "description": "Skip through the stories and find the recipe you're looking for.",
+  "icons": {
+    "128": "img/icon-128.png",
+    "512": "img/icon-512.png",
+    "16": "img/icon-16.png"
+  },
+  "permissions": [
+    "storage"
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["img/icon-128.png","img/bmc.png","img/github-128.png", "css/popup.css"],
+      "matches": ["<all_urls>"]
+    }
+  ],
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "css": [
+        "css/popup.css"
+      ],
+      "js": [
+        "js/script.js"
+      ]
+    }
+  ],
+  "action": {
+    "default_popup": "html/settings.html",
+    "default_title": "Recipe Spotlight",
+    "default_icon": "img/icon-128.png"
+  },
+  "content_security_policy": {}
+}
