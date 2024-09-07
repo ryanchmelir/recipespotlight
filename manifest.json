@@ -3,7 +3,7 @@
   "manifest_version": 3,
   "name": "Recipe Spotlight",
   "short_name": "Recipe Spotlight",
-  "version": "0.1",
+  "version": "0.2",
   "description": "Skip through the stories and find the recipe you're looking for.",
   "icons": {
     "128": "img/icon-128.png",
