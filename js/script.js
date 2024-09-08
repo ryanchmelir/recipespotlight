@@ -64,6 +64,19 @@ function displayRecipePopup() {
 // Function to find recipe components on the page
 function findRecipeComponents() {
     console.log("Finding recipe components");
+    const structuredData = extractStructuredRecipeData();
+    
+    if (structuredData) {
+        console.log("Structured recipe data found:", structuredData);
+        return {
+            container: [{ element: document.createElement('div'), score: 1000 }],
+            ingredients: [{ element: createListElement(structuredData.ingredients), score: 1000 }],
+            directions: [{ element: createListElement(structuredData.instructions), score: 1000 }],
+            structuredData: structuredData
+        };
+    }
+    
+    // If no structured data, fall back to the original method
     const recipeComponents = {
         container: [],
         ingredients: [],
@@ -100,7 +113,6 @@ function findRecipeComponents() {
             });
         }
     }
-
     // Sort components by score and take the top 3
     for (const component in recipeComponents) {
         recipeComponents[component].sort((a, b) => b.score - a.score);
@@ -166,16 +178,46 @@ function populateRecipeContent(recipeDiv, recipeComponents) {
     const contentDiv = document.createElement('div');
     contentDiv.id = '_recipe_spotlight_content';
 
-    // Add the highest scoring elements to the recipe div
-    if (recipeComponents['ingredients'].length > 0 && recipeComponents['directions'].length > 0) {
-        addComponentToContent(contentDiv, 'Ingredients', recipeComponents['ingredients'], isDuplicateText);
-        addComponentToContent(contentDiv, 'Directions', recipeComponents['directions'], isDuplicateText);
+    if (recipeComponents.structuredData) {
+        const data = recipeComponents.structuredData;
+        
+        // Add recipe name
+        const nameHeader = document.createElement('h1');
+        nameHeader.textContent = data.name;
+        contentDiv.appendChild(nameHeader);
+        
+        // Add description if available
+        if (data.description) {
+            const descriptionP = document.createElement('p');
+            descriptionP.textContent = data.description;
+            contentDiv.appendChild(descriptionP);
+        }
+        
+        // Add cooking times and yield
+        const metaInfo = document.createElement('div');
+        metaInfo.innerHTML = `
+            ${data.prepTime ? `<p>Prep Time: ${data.prepTime}</p>` : ''}
+            ${data.cookTime ? `<p>Cook Time: ${data.cookTime}</p>` : ''}
+            ${data.totalTime ? `<p>Total Time: ${data.totalTime}</p>` : ''}
+            ${data.yield ? `<p>Yield: ${data.yield}</p>` : ''}
+        `;
+        contentDiv.appendChild(metaInfo);
+        
+        // Add ingredients and instructions
+        addComponentToContent(contentDiv, 'Ingredients', [recipeComponents.ingredients[0]], isDuplicateText);
+        addComponentToContent(contentDiv, 'Instructions', [recipeComponents.directions[0]], isDuplicateText);
     } else {
-        ['ingredients', 'directions', 'container'].forEach(component => {
-            if (recipeComponents[component].length > 0) {
-                addComponentToContent(contentDiv, component.charAt(0).toUpperCase() + component.slice(1), recipeComponents[component], isDuplicateText);
-            }
-        });
+        // Fall back to the original method if no structured data
+        if (recipeComponents['ingredients'].length > 0 && recipeComponents['directions'].length > 0) {
+            addComponentToContent(contentDiv, 'Ingredients', recipeComponents['ingredients'], isDuplicateText);
+            addComponentToContent(contentDiv, 'Directions', recipeComponents['directions'], isDuplicateText);
+        } else {
+            ['ingredients', 'directions', 'container'].forEach(component => {
+                if (recipeComponents[component].length > 0) {
+                    addComponentToContent(contentDiv, component.charAt(0).toUpperCase() + component.slice(1), recipeComponents[component], isDuplicateText);
+                }
+            });
+        }
     }
 
     // Remove ads and unnecessary elements
@@ -486,6 +528,48 @@ function createFooter() {
         </div>
     `;
     return footer;
+}
+
+// Function to extract structured recipe data
+function extractStructuredRecipeData() {
+    const jsonLdScripts = document.querySelectorAll('script[type="application/ld+json"]');
+    for (const script of jsonLdScripts) {
+        try {
+            const data = JSON.parse(script.textContent);
+            if (data['@type'] === 'Recipe' || (Array.isArray(data['@graph']) && data['@graph'].some(item => item['@type'] === 'Recipe'))) {
+                let recipeData = data['@type'] === 'Recipe' ? data : data['@graph'].find(item => item['@type'] === 'Recipe');
+                return {
+                    name: recipeData.name,
+                    ingredients: Array.isArray(recipeData.recipeIngredient) ? recipeData.recipeIngredient : [],
+                    instructions: Array.isArray(recipeData.recipeInstructions) 
+                        ? recipeData.recipeInstructions.map(step => typeof step === 'string' ? step : step.text)
+                        : typeof recipeData.recipeInstructions === 'string' 
+                            ? [recipeData.recipeInstructions] 
+                            : [],
+                    description: recipeData.description || '',
+                    image: recipeData.image || '',
+                    cookTime: recipeData.cookTime || '',
+                    prepTime: recipeData.prepTime || '',
+                    totalTime: recipeData.totalTime || '',
+                    yield: recipeData.recipeYield || ''
+                };
+            }
+        } catch (e) {
+            console.error('Error parsing JSON-LD:', e);
+        }
+    }
+    return null;
+}
+
+// Function to create a list element from an array of items
+function createListElement(items) {
+    const list = document.createElement('ul');
+    items.forEach(item => {
+        const li = document.createElement('li');
+        li.textContent = item;
+        list.appendChild(li);
+    });
+    return list;
 }
 
 // Initialize the extension
